@@ -63,6 +63,11 @@ public class Main {
                     List<Video> videos = videoService.listVideos();
                 for (Video video : videos) {
                     System.out.println(video);
+                    System.out.println("Título: " + video.getTitulo());
+                    System.out.println("Descrição: " + video.getDescricao());
+                    System.out.println("Categoria: " + video.getCategoria());
+                    System.out.println("Duração: " + video.getDuracao());
+                    System.out.println("Data da publicação: " + video.getDataPublicacao());
                 }
                 break;
 
