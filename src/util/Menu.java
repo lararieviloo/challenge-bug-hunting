@@ -1,5 +1,6 @@
 package util;
 
+import model.Categoria;
 import model.Video;
 import service.VideoService;
 import strategy.SearchStrategy;
@@ -21,27 +22,41 @@ public class Menu {
     }
 
     public int exibirMenu() {
-            System.out.println("\n=== Sistema de Gerenciamento de Vídeos ===");
-            System.out.println("Escolha uma opção: ");
-            System.out.println("1. Adicionar vídeo");
-            System.out.println("2. Listar vídeos");
-            System.out.println("3. Pesquisar vídeo por título");
-            System.out.println("4. Editar vídeo");
-            System.out.println("5. Excluir vídeo");
-            System.out.println("6. Filtrar vídeos por categoria");
-            System.out.println("7. Ordenar vídeos por data de publicação");
-            System.out.println("8. Relatório de estatísticas");
-            System.out.println("9. Sair");
-            return scanner.nextInt();
-        }
+        System.out.println("\n=== Sistema de Gerenciamento de Vídeos ===");
+        System.out.println("Escolha uma opção: ");
+        System.out.println("1. Adicionar vídeo");
+        System.out.println("2. Listar vídeos");
+        System.out.println("3. Pesquisar vídeo por título");
+        System.out.println("4. Editar vídeo");
+        System.out.println("5. Excluir vídeo");
+        System.out.println("6. Filtrar vídeos por categoria");
+        System.out.println("7. Ordenar vídeos por data de publicação");
+        System.out.println("8. Relatório de estatísticas");
+        System.out.println("9. Sair");
+        return scanner.nextInt();
+    }
 
     public void adicionarVideo() {
         scanner.nextLine();
 
-        System.out.print("Digite o título do vídeo: ");
-        String titulo = scanner.nextLine();
-        System.out.print("Digite a descrição do vídeo: ");
-        String descricao = scanner.nextLine();
+        String titulo;
+        do {
+            System.out.print("Digite o título do vídeo: ");
+            titulo = scanner.nextLine();
+            if (titulo.isEmpty()) {
+                System.out.println("O título não pode ser vazio!");
+            }
+        } while (titulo.isEmpty());
+
+        String descricao;
+        do {
+            System.out.print("Digite a descrição do vídeo: ");
+            descricao = scanner.nextLine();
+            if (descricao.isEmpty()) {
+                System.out.println("A descrição não pode ser vazia!");
+            }
+        } while (descricao.isEmpty());
+
         int duracao;
         while (true) {
             System.out.print("Digite a duração do vídeo (em minutos): ");
@@ -57,31 +72,47 @@ public class Menu {
                 System.out.println("Insira apenas números para a duração, por favor.");
             }
         }
-        System.out.print("Digite a categoria do vídeo: ");
-        String categoria = scanner.nextLine();
+
+        Categoria categoria;
+        do {
+            System.out.print("Digite a categoria do vídeo (Série ou Filme): ");
+            String categoriaInput = scanner.nextLine().trim().toUpperCase();
+
+            try {
+                categoria = Categoria.valueOf(categoriaInput); // Converte a string para o enum
+                break; // Se a conversão for bem-sucedida, sai do loop
+            } catch (IllegalArgumentException e) {
+                System.out.println("Categoria inválida! As categorias válidas são: FILME, SERIE.");
+            }
+        } while (true); // Loop até categoria válida ser fornecida
 
         Date dataPublicacao;
-        SimpleDateFormat dateFormat = new SimpleDateFormat ("ss/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateFormat.setLenient(false);
+
         while (true) {
             System.out.print("Digite a data de publicação (dd/MM/yyyy): ");
             String dataStr = scanner.nextLine();
             try {
-                dataPublicacao = dateFormat.parse(dataStr);
-                break;
+                dataPublicacao = dateFormat.parse(dataStr); // Tenta fazer o parse da data
+                break; // Se a data for válida, sai do loop
             } catch (ParseException e) {
                 System.out.println("Por favor, insira uma data válida no formato dd/MM/yyyy");
             }
         }
 
-        Video video = new Video(titulo, descricao, duracao, categoria, dataPublicacao);
-        VideoService.adicionarVideo(video);
+        String dataPublicacaoStr = dateFormat.format(dataPublicacao);
+
+        // Cria o vídeo com todos os dados coletados
+        Video video = new Video(titulo, descricao, duracao, categoria, dataPublicacaoStr);
+        videoService.addVideo(video);
 
         System.out.println("\nVídeo adicionado com sucesso! Dados do vídeo:");
         System.out.println("Título: " + titulo);
         System.out.println("Descrição: " + descricao);
         System.out.println("Duração: " + duracao + " minutos");
-        System.out.println("Categoria: " + categoria);
-        System.out.println("Data de Publicação: " + dateFormat.format(dataPublicacao));
+        System.out.println("Categoria: " + categoria); // Categoria agora é do tipo Enum
+        System.out.println("Data de Publicação: " + dataPublicacaoStr);
     }
 }
+

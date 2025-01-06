@@ -11,5 +11,3 @@ public interface VideoService {
     void addVideo(Video video);
     List<Video> listVideos();
 }
-
-// mexer na função de deletar
