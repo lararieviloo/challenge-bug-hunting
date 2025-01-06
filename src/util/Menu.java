@@ -79,12 +79,12 @@ public class Menu {
             String categoriaInput = scanner.nextLine().trim().toUpperCase();
 
             try {
-                categoria = Categoria.valueOf(categoriaInput); // Converte a string para o enum
-                break; // Se a conversão for bem-sucedida, sai do loop
+                categoria = Categoria.valueOf(categoriaInput);
+                break;
             } catch (IllegalArgumentException e) {
                 System.out.println("Categoria inválida! As categorias válidas são: FILME, SERIE.");
             }
-        } while (true); // Loop até categoria válida ser fornecida
+        } while (true);
 
         Date dataPublicacao;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -94,8 +94,8 @@ public class Menu {
             System.out.print("Digite a data de publicação (dd/MM/yyyy): ");
             String dataStr = scanner.nextLine();
             try {
-                dataPublicacao = dateFormat.parse(dataStr); // Tenta fazer o parse da data
-                break; // Se a data for válida, sai do loop
+                dataPublicacao = dateFormat.parse(dataStr);
+                break;
             } catch (ParseException e) {
                 System.out.println("Por favor, insira uma data válida no formato dd/MM/yyyy");
             }
@@ -103,7 +103,6 @@ public class Menu {
 
         String dataPublicacaoStr = dateFormat.format(dataPublicacao);
 
-        // Cria o vídeo com todos os dados coletados
         Video video = new Video(titulo, descricao, duracao, categoria, dataPublicacaoStr);
         videoService.addVideo(video);
 
@@ -111,7 +110,7 @@ public class Menu {
         System.out.println("Título: " + titulo);
         System.out.println("Descrição: " + descricao);
         System.out.println("Duração: " + duracao + " minutos");
-        System.out.println("Categoria: " + categoria); // Categoria agora é do tipo Enum
+        System.out.println("Categoria: " + categoria);
         System.out.println("Data de Publicação: " + dataPublicacaoStr);
     }
 }

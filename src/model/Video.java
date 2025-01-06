@@ -61,9 +61,9 @@ public class Video {
     }
     public void setCategoria(String categoria) {
         try {
-            this.categoria = Categoria.valueOf(categoria.toUpperCase()); // Convertendo para maiúsculas
+            this.categoria = Categoria.valueOf(categoria.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Categoria inválida. As categorias válidas são: FILME, SERIE, DOCUMENTARIO, OUTROS.");
+            throw new IllegalArgumentException("Categoria inválida. As categorias válidas são: FILME ou SERIE");
         }
     }
     public void setDataPublicacao(String dataPublicacao) {
